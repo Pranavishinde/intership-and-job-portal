@@ -2,9 +2,9 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Student Dashboard</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
     <style>
         body {
             background: #f4f6f9;
@@ -59,12 +59,57 @@
         .skill-badge {
             margin: 3px;
         }
+        
+        .company-logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-right: 15px;
+            border: 1px solid #ddd;
+            background: white;
+        }
+        
+        .job-internship-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .job-internship-header h5 {
+            margin: 0;
+        }
+        /* ⭐ Rating stars */
+        
+        .stars span {
+            font-size: 22px;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.2s;
+            margin-right: 3px;
+        }
+        
+        .stars span.active {
+            color: gold;
+        }
+        
+        .review {
+            border-top: 1px solid #ddd;
+            padding: 5px 0;
+            font-size: 14px;
+        }
+        
+        .avg-rating {
+            font-size: 14px;
+            margin-top: 5px;
+            color: #333;
+        }
     </style>
 </head>
 
 <body>
     <div class="d-flex">
-        Sidebar
+        <!-- Sidebar -->
         <div class="sidebar">
             <h3>My Dashboard</h3>
             <a onclick="showSection('profileSection')">My Profile</a>
@@ -85,27 +130,27 @@
                     <!-- Profile Photo -->
                     <div class="mb-3">
                         <label class="form-label">Profile Photo</label>
-                        <input type="file" class="form-control" id="studentPhoto" accept="image/*" onchange="previewPhoto(event)">
-                        <img id="profilePhotoPreview" src="https://via.placeholder.com/120" alt="Profile Photo">
+                        <input type="file" class="form-control" id="studentPhoto" accept="image/*" onchange="previewPhoto(event)" />
+                        <img id="profilePhotoPreview" src="https://via.placeholder.com/120" alt="Profile Photo" />
                     </div>
 
                     <!-- Name -->
                     <div class="mb-3">
                         <label class="form-label">Full Name</label>
-                        <input type="text" class="form-control" id="studentName" value="John Doe">
+                        <input type="text" class="form-control" id="studentName" value="John Doe" />
                     </div>
 
                     <!-- Email -->
                     <div class="mb-3">
                         <label class="form-label">Email</label>
-                        <input type="email" class="form-control" id="studentEmail" value="john@example.com">
+                        <input type="email" class="form-control" id="studentEmail" value="john@example.com" />
                     </div>
 
                     <!-- Skills -->
                     <div class="mb-3">
                         <label class="form-label">Skills</label>
                         <div class="d-flex">
-                            <input type="text" class="form-control me-2" id="skillInput" placeholder="Enter a skill">
+                            <input type="text" class="form-control me-2" id="skillInput" placeholder="Enter a skill" />
                             <button type="button" class="btn btn-secondary" onclick="addSkill()">Add</button>
                         </div>
                         <div id="skillList" class="mt-2"></div>
@@ -114,7 +159,7 @@
                     <!-- Resume Upload -->
                     <div class="mb-3">
                         <label class="form-label">Upload Resume</label>
-                        <input type="file" class="form-control" id="studentResume" accept=".pdf,.doc,.docx">
+                        <input type="file" class="form-control" id="studentResume" accept=".pdf,.doc,.docx" />
                     </div>
 
                     <button type="button" class="btn btn-success" onclick="saveProfile()">Save Profile</button>
@@ -124,34 +169,78 @@
             <!-- Jobs Section -->
             <div id="jobSection" class="hidden">
                 <h2>Available Jobs</h2>
-                <input type="text" id="searchBarJobs" class="form-control mb-3" placeholder="Search jobs or companies">
+                <input type="text" id="searchBarJobs" class="form-control mb-3" placeholder="Search jobs or companies" onkeyup="filterJobs()" />
                 <div id="jobList">
-                    <div class="card">
+                    <!-- Dummy Job Post 1 -->
+                    <div class="card job-card">
                         <div class="card-body">
-                            <h5 class="card-title">Software Engineer</h5>
-                            <p class="card-text">Company: XYZ Pvt Ltd | Location: Mumbai</p>
-                            <p><b>Skills:</b> Java, SQL, Spring</p>
-                            <button class="btn btn-primary">Apply</button>
+                            <div class="job-internship-header">
+                                <img class="company-logo" src="https://logo.clearbit.com/google.com" alt="Google Logo" />
+                                <h5 class="card-title">Software Engineer</h5>
+                            </div>
+                            <p class="card-text"><b>Company:</b> Google | <b>Location:</b> Mountain View, CA</p>
+                            <p><b>Skills:</b> Java, C++, Python</p>
+                            <button class="btn btn-primary" onclick="applyJob(this)">Apply</button>
                             <button class="btn btn-outline-warning" onclick="addToFav(this)">Add to Favourites</button>
+
+                            <!-- Rating + Comments -->
+                            <div class="rating-section mt-3">
+                                <label><b>Rate this company:</b></label>
+                                <div class="stars" data-rating="0">
+                                    <span onclick="setRating(this)">★</span>
+                                    <span onclick="setRating(this)">★</span>
+                                    <span onclick="setRating(this)">★</span>
+                                    <span onclick="setRating(this)">★</span>
+                                    <span onclick="setRating(this)">★</span>
+                                </div>
+                                <div class="avg-rating">Average Rating: 0 ★</div>
+                                <textarea class="form-control mt-2" placeholder="Write your comment..."></textarea>
+                                <button class="btn btn-sm btn-success mt-2" onclick="submitReview(this)">Submit Review</button>
+                                <div class="reviews mt-2"></div>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- Add more jobs same format ... -->
                 </div>
             </div>
 
             <!-- Internship Section -->
             <div id="internshipSection" class="hidden">
                 <h2>Available Internships</h2>
-                <input type="text" id="searchBarIntern" class="form-control mb-3" placeholder="Search internships or companies">
+                <input type="text" id="searchBarIntern" class="form-control mb-3" placeholder="Search internships or companies" onkeyup="filterInternships()" />
                 <div id="internshipList">
-                    <div class="card">
+                    <!-- Dummy Internship 1 -->
+                    <div class="card internship-card">
                         <div class="card-body">
-                            <h5 class="card-title">Web Developer Intern</h5>
-                            <p class="card-text">Company: ABC Tech | Location: Remote</p>
+                            <div class="job-internship-header">
+                                <img class="company-logo" src="https://logo.clearbit.com/facebook.com" alt="Facebook Logo" />
+                                <h5 class="card-title">Web Developer Intern</h5>
+                            </div>
+                            <p class="card-text"><b>Company:</b> Facebook (Meta) | <b>Location:</b> Remote</p>
                             <p><b>Skills:</b> HTML, CSS, JavaScript</p>
-                            <button class="btn btn-primary">Apply</button>
+                            <button class="btn btn-primary" onclick="applyJob(this)">Apply</button>
                             <button class="btn btn-outline-warning" onclick="addToFav(this)">Add to Favourites</button>
+
+                            <!-- Rating + Comments -->
+                            <div class="rating-section mt-3">
+                                <label><b>Rate this company:</b></label>
+                                <div class="stars" data-rating="0">
+                                    <span onclick="setRating(this)">★</span>
+                                    <span onclick="setRating(this)">★</span>
+                                    <span onclick="setRating(this)">★</span>
+                                    <span onclick="setRating(this)">★</span>
+                                    <span onclick="setRating(this)">★</span>
+                                </div>
+                                <div class="avg-rating">Average Rating: 0 ★</div>
+                                <textarea class="form-control mt-2" placeholder="Write your comment..."></textarea>
+                                <button class="btn btn-sm btn-success mt-2" onclick="submitReview(this)">Submit Review</button>
+                                <div class="reviews mt-2"></div>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- Add more internships same format ... -->
                 </div>
             </div>
 
@@ -164,7 +253,9 @@
             <!-- Applied Section -->
             <div id="appliedSection" class="hidden">
                 <h2>Applied Jobs/Internships</h2>
-                <p>No applications yet.</p>
+                <div id="appliedList">
+                    <p>No applications yet.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -183,7 +274,7 @@
             let reader = new FileReader();
             reader.onload = function() {
                 document.getElementById("profilePhotoPreview").src = reader.result;
-            }
+            };
             reader.readAsDataURL(event.target.files[0]);
         }
 
@@ -213,9 +304,88 @@
         function addToFav(btn) {
             let favList = document.getElementById("favList");
             let card = btn.closest(".card").cloneNode(true);
-            card.querySelector("button").remove(); // remove Apply button
-            btn.remove(); // remove Fav button
+            let buttons = card.querySelectorAll("button");
+            buttons.forEach(b => b.remove());
             favList.appendChild(card);
+        }
+
+        // Apply for job/internship
+        function applyJob(btn) {
+            let appliedList = document.getElementById("appliedList");
+            if (appliedList.querySelector("p")) {
+                appliedList.innerHTML = "";
+            }
+            let card = btn.closest(".card").cloneNode(true);
+            let buttons = card.querySelectorAll("button");
+            buttons.forEach(b => b.remove());
+            appliedList.appendChild(card);
+            alert("Application submitted!");
+        }
+
+        // ⭐ Rating System
+        function setRating(star) {
+            let stars = star.parentNode.querySelectorAll("span");
+            let index = Array.from(stars).indexOf(star);
+            stars.forEach((s, i) => {
+                s.classList.toggle("active", i <= index);
+            });
+            star.parentNode.setAttribute("data-rating", index + 1);
+        }
+
+        // ⭐ Submit Review
+        function submitReview(btn) {
+            let card = btn.closest(".card");
+            let starsDiv = card.querySelector(".stars");
+            let rating = parseInt(starsDiv.getAttribute("data-rating"));
+            let textarea = card.querySelector("textarea");
+            let comment = textarea.value.trim();
+
+            if (rating === 0) {
+                alert("Please select a star rating!");
+                return;
+            }
+            if (comment === "") {
+                alert("Please enter a comment!");
+                return;
+            }
+
+            let reviewsDiv = card.querySelector(".reviews");
+            let review = document.createElement("div");
+            review.className = "review";
+            review.innerHTML = `<b>Rating:</b> ${rating} ★ | <b>Comment:</b> ${comment}`;
+            reviewsDiv.appendChild(review);
+
+            // Update average rating
+            let allRatings = Array.from(reviewsDiv.querySelectorAll(".review")).map(r =>
+                parseInt(r.innerHTML.match(/Rating:\<\/b\> (\d)/)[1])
+            );
+            let avg = (allRatings.reduce((a, b) => a + b, 0) / allRatings.length).toFixed(1);
+            card.querySelector(".avg-rating").innerText = `Average Rating: ${avg} ★`;
+
+            // Reset input
+            textarea.value = "";
+            starsDiv.setAttribute("data-rating", 0);
+            starsDiv.querySelectorAll("span").forEach(s => s.classList.remove("active"));
+        }
+
+        // Filter jobs
+        function filterJobs() {
+            let input = document.getElementById("searchBarJobs").value.toLowerCase();
+            let jobs = document.querySelectorAll("#jobList .job-card");
+            jobs.forEach(job => {
+                let text = job.innerText.toLowerCase();
+                job.style.display = text.includes(input) ? "" : "none";
+            });
+        }
+
+        // Filter internships
+        function filterInternships() {
+            let input = document.getElementById("searchBarIntern").value.toLowerCase();
+            let internships = document.querySelectorAll("#internshipList .internship-card");
+            internships.forEach(internship => {
+                let text = internship.innerText.toLowerCase();
+                internship.style.display = text.includes(input) ? "" : "none";
+            });
         }
     </script>
 </body>
