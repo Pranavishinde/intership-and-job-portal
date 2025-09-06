@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Global */
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        body {
+            background: #f4f6f9;
+            color: #333;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        button {
+            cursor: pointer;
+        }
+        /* Navbar */
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0073e6;
+            padding: 1rem 2rem;
+            color: #fff;
+        }
+        
+        nav h1 {
+            font-size: 1.8rem;
+        }
+        
+        nav .logout {
+            background: #ff4b5c;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+        
+        nav .logout:hover {
+            background: #ff1f3a;
+        }
+        /* Container */
+        
+        .container {
+            display: flex;
+            min-height: 90vh;
+        }
+        /* Sidebar */
+        
+        .sidebar {
+            width: 250px;
+            background: #1f2937;
+            color: #fff;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar img {
+            border-radius: 50%;
+            width: 100px;
+            margin: 0 auto 1rem auto;
+            display: block;
+        }
+        
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .sidebar a {
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 5px;
+            transition: 0.3s;
+            display: block;
+            color: #fff;
+        }
+        
+        .sidebar a:hover {
+            background: #3b82f6;
+        }
+        /* Main content */
+        
+        .main {
+            flex: 1;
+            padding: 2rem;
+        }
+        
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        /* Form */
+        
+        form {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin-bottom: 2rem;
+        }
+        
+        form input,
+        form textarea,
+        form select {
+            width: 100%;
+            padding: 0.7rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        form button {
+            background: #0073e6;
+            color: #fff;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        
+        form button:hover {
+            background: #005bb5;
+        }
+        /* Cards */
+        
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        
+        .card-body {
+            padding: 1rem;
+        }
+        
+        .card-body h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #0073e6;
+        }
+        
+        .card-body p {
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-body button {
+            background: #0073e6;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        
+        .card-body button:hover {
+            background: #005bb5;
+        }
+        /* Applicant Login */
+        
+        #applicantLoginForm {
+            max-width: 400px;
+            margin: auto;
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        @media (max-width:768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                overflow-x: auto;
+            }
+            .sidebar h2 {
+                display: none;
+            }
+            .sidebar a {
+                margin: 0 0.5rem;
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <h1>Company Dashboard</h1>
+        <div class="logout" onclick="alert('Logout Clicked')">Logout</div>
+    </nav>
+
+    <!-- Container -->
+    <div class="container">
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <img src="https://images.unsplash.com/photo-1603415526960-fbbf38b19fc3?crop=faces&fit=crop&w=200&h=200" alt="Company Logo">
+            <h2>My Company</h2>
+            <a href="#" onclick="showSection('postInternship')">Post Internship</a>
+            <a href="#" onclick="showSection('postJob')">Post Job</a>
+            <a href="#" onclick="showSection('viewApplicants')">View Applicants</a>
+        </div>
+
+        <!-- Main content -->
+        <div class="main">
+
+            <!-- Post Internship Form -->
+            <div id="postInternship" class="section active">
+                <h2>Post Internship</h2>
+                <form id="internshipForm">
+                    <input type="text" placeholder="Company Name" required name="companyName">
+                    <input type="file" accept="image/*" required name="logo" id="internLogo">
+                    <input type="text" placeholder="Title" required name="title">
+                    <input type="text" placeholder="Location" required name="location">
+                    <input type="date" required name="deadline">
+                    <input type="text" placeholder="Required Skills (comma separated)" required name="skills">
+                    <input type="text" placeholder="Experience / Qualification" name="experience">
+                    <input type="text" placeholder="Stipend / Salary" name="salary">
+                    <select name="jobType" required>
+          <option value="">Select Job Type</option>
+          <option>Internship</option>
+          <option>Full-time</option>
+          <option>Part-time</option>
+        </select>
+                    <select name="mode" required>
+          <option value="">Select Mode</option>
+          <option>Remote</option>
+          <option>On-site</option>
+        </select>
+                    <textarea placeholder="Description" rows="3" name="description"></textarea>
+                    <button type="submit">Post Internship</button>
+                </form>
+                <div class="cards" id="internshipPosts"></div>
+            </div>
+
+            <!-- Post Job Form -->
+            <div id="postJob" class="section">
+                <h2>Post Job</h2>
+                <form id="jobForm">
+                    <input type="text" placeholder="Company Name" required name="companyName">
+                    <input type="file" accept="image/*" required name="logo" id="jobLogo">
+                    <input type="text" placeholder="Title" required name="title">
+                    <input type="text" placeholder="Location" required name="location">
+                    <input type="date" required name="deadline">
+                    <input type="text" placeholder="Required Skills (comma separated)" required name="skills">
+                    <input type="text" placeholder="Experience / Qualification" name="experience">
+                    <input type="text" placeholder="Salary" name="salary">
+                    <select name="jobType" required>
+          <option value="">Select Job Type</option>
+          <option>Full-time</option>
+          <option>Part-time</option>
+        </select>
+                    <select name="mode" required>
+          <option value="">Select Mode</option>
+          <option>Remote</option>
+          <option>On-site</option>
+        </select>
+                    <textarea placeholder="Description" rows="3" name="description"></textarea>
+                    <button type="submit">Post Job</button>
+                </form>
+                <div class="cards" id="jobPosts"></div>
+            </div>
+
+            <!-- View Applicants with Company Login -->
+            <div id="viewApplicants" class="section">
+                <h2>View Applicants</h2>
+                <p>Login with your company credentials to see who applied:</p>
+                <form id="applicantLoginForm">
+                    <input type="text" placeholder="Company Name" required name="companyName">
+                    <input type="password" placeholder="Password" required name="password">
+                    <button type="submit">Login</button>
+                </form>
+
+                <!-- Filter -->
+                <div id="filterSection" style="margin-top:1rem; display:none;">
+                    <input type="text" id="filterSkill" placeholder="Filter by Skill">
+                    <input type="text" id="filterPost" placeholder="Filter by Post">
+                    <button onclick="applyFilter()">Filter</button>
+                </div>
+
+                <div class="cards" id="applicantsContainer" style="margin-top:1rem;"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Section toggle
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        // Helper: convert uploaded image to base64
+        function getBase64(file, callback) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function() {
+                callback(reader.result);
+            };
+            reader.onerror = function(error) {
+                console.log(error);
+            };
+        }
+
+        // Post Internship
+        const internshipForm = document.getElementById('internshipForm');
+        const internshipPosts = document.getElementById('internshipPosts');
+        internshipForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const f = new FormData(internshipForm);
+            const file = f.get('logo');
+            getBase64(file, function(logoBase64) {
+                const post = {
+                    companyName: f.get('companyName'),
+                    logo: logoBase64,
+                    title: f.get('title'),
+                    location: f.get('location'),
+                    deadline: f.get('deadline'),
+                    skills: f.get('skills'),
+                    experience: f.get('experience'),
+                    salary: f.get('salary'),
+                    jobType: f.get('jobType'),
+                    mode: f.get('mode'),
+                    description: f.get('description')
+                };
+                internshipPosts.innerHTML += generatePostCard(post);
+                internshipForm.reset();
+            });
+        });
+
+        // Post Job
+        const jobForm = document.getElementById('jobForm');
+        const jobPosts = document.getElementById('jobPosts');
+        jobForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const f = new FormData(jobForm);
+            const file = f.get('logo');
+            getBase64(file, function(logoBase64) {
+                const post = {
+                    companyName: f.get('companyName'),
+                    logo: logoBase64,
+                    title: f.get('title'),
+                    location: f.get('location'),
+                    deadline: f.get('deadline'),
+                    skills: f.get('skills'),
+                    experience: f.get('experience'),
+                    salary: f.get('salary'),
+                    jobType: f.get('jobType'),
+                    mode: f.get('mode'),
+                    description: f.get('description')
+                };
+                jobPosts.innerHTML += generatePostCard(post);
+                jobForm.reset();
+            });
+        });
+
+        // Generate Post Card
+        function generatePostCard(post) {
+            return `
+  <div class="card">
+    <img src="${post.logo}" alt="${post.companyName} Logo">
+    <div class="card-body">
+      <h3>${post.title} - ${post.companyName}</h3>
+      <p><strong>Location:</strong> ${post.location}</p>
+      <p><strong>Deadline:</strong> ${post.deadline}</p>
+      <p><strong>Skills:</strong> ${post.skills}</p>
+      <p><strong>Experience:</strong> ${post.experience}</p>
+      <p><strong>Salary/Stipend:</strong> ${post.salary}</p>
+      <p><strong>Type/Mode:</strong> ${post.jobType} / ${post.mode}</p>
+      <p>${post.description}</p>
+      <button onclick="alert('Applicants visible after login')">View Applicants</button>
+    </div>
+  </div>
+  `;
+        }
+
+        // Dummy applicants data
+        const applicantsData = [{
+            company: 'My Company',
+            name: 'John Doe',
+            email: 'john@example.com',
+            post: 'Frontend Internship',
+            skills: 'HTML, CSS, JS',
+            resume: '#'
+        }, {
+            company: 'Other Company',
+            name: 'Jane Smith',
+            email: 'jane@example.com',
+            post: 'Backend Developer',
+            skills: 'Python, Django',
+            resume: '#'
+        }, {
+            company: 'My Company',
+            name: 'Alice Lee',
+            email: 'alice@example.com',
+            post: 'Frontend Internship',
+            skills: 'React, JS',
+            resume: '#'
+        }];
+
+        const applicantLoginForm = document.getElementById('applicantLoginForm');
+        const applicantsContainer = document.getElementById('applicantsContainer');
+        let currentCompanyApplicants = [];
+
+        applicantLoginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const f = new FormData(applicantLoginForm);
+            const companyName = f.get('companyName');
+
+            // Filter applicants for this company
+            currentCompanyApplicants = applicantsData.filter(a => a.company === companyName);
+            if (currentCompanyApplicants.length === 0) {
+                applicantsContainer.innerHTML = '<p>No applicants found or wrong company login.</p>';
+                document.getElementById('filterSection').style.display = 'none';
+            } else {
+                document.getElementById('filterSection').style.display = 'block';
+                displayApplicants(currentCompanyApplicants);
+            }
+        });
+
+        // Display Applicants
+        function displayApplicants(list) {
+            applicantsContainer.innerHTML = list.map(a => `
+      <div class="card">
+        <div class="card-body">
+          <h3>${a.name} - ${a.post}</h3>
+          <p><strong>Email:</strong> ${a.email}</p>
+          <p><strong>Skills:</strong> ${a.skills}</p>
+          <p><strong>Resume:</strong> <a href="${a.resume}" target="_blank">View</a></p>
+        </div>
+      </div>
+  `).join('');
+        }
+
+        // Filter function
+        function applyFilter() {
+            const skillFilter = document.getElementById('filterSkill').value.toLowerCase();
+            const postFilter = document.getElementById('filterPost').value.toLowerCase();
+            const filtered = currentCompanyApplicants.filter(a =>
+                (a.skills.toLowerCase().includes(skillFilter) || !skillFilter) &&
+                (a.post.toLowerCase().includes(postFilter) || !postFilter)
+            );
+            displayApplicants(filtered);
+        }
+    </script>
+
+</body>
+
+</html>

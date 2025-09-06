@@ -1,0 +1,234 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusConnect - Internship & Job Portal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    Header / Navigation -->
+<!-- <header>
+    <div class="logo">CampusConnect</div>
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#" id="logout">Logout</a></li>
+            <li>
+                <button id="toggleMode">Dark Mode</button>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+ Hero Section 
+<section class="hero">
+    <div class="hero-content">
+        <h1>Find Your Dream Internship or Job</h1>
+        <p>Connect with top companies and get your next opportunity!</p>
+        <div class="hero-buttons">
+            <a href="#" class="btn">Find Internships</a>
+            <a href="#" class="btn">Find Jobs</a>
+        </div>
+    </div>
+</section>
+
+ Job/Internship Section 
+<section class="jobs-section">
+    <h2>Available Opportunities</h2>
+    <div class="job-cards" id="jobCards">
+         Job cards will be dynamically added here -->
+<!-- </div>
+</section> -->
+
+<!-- Footer -->
+<!-- <footer>
+    <p>&copy; 2025 CampusConnect. All rights reserved.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+
+</html> -->
+<!-- Signup Form -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusConnect - Login/Signup</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            width: 350px;
+        }
+        
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background: #0073e6;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #005bb5;
+        }
+        
+        p {
+            text-align: center;
+            margin-top: 15px;
+        }
+        
+        span {
+            color: #0073e6;
+            cursor: pointer;
+        }
+        
+        .form {
+            display: none;
+        }
+        
+        .form.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Login Form -->
+        <form id="loginForm" class="form active">
+            <h2>Login</h2>
+            <input type="text" id="loginUsername" placeholder="Username" required>
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <select id="loginRole" required>
+      <option value="">Select Role</option>
+      <option value="student">Student</option>
+      <option value="company">Company</option>
+      <option value="admin">Admin</option>
+    </select>
+            <button type="submit">Login</button>
+            <p>Don't have an account? <span id="showSignup">Signup</span></p>
+        </form>
+
+        <!-- Signup Form -->
+        <form id="signupForm" class="form">
+            <h2>Signup</h2>
+            <input type="text" id="signupUsername" placeholder="Username" required>
+            <input type="email" id="signupEmail" placeholder="Email" required>
+            <input type="password" id="signupPassword" placeholder="Password" required>
+            <input type="password" id="signupConfirm" placeholder="Confirm Password" required>
+            <select id="signupRole" required>
+      <option value="">Select Role</option>
+      <option value="student">Student</option>
+      <option value="company">Company</option>
+      <option value="admin">Admin</option>
+    </select>
+            <button type="submit">Signup</button>
+            <p>Already have an account? <span id="showLogin">Login</span></p>
+        </form>
+    </div>
+
+    <script>
+        // Toggle forms
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+        document.getElementById('showSignup').addEventListener('click', () => {
+            loginForm.classList.remove('active');
+            signupForm.classList.add('active');
+        });
+        document.getElementById('showLogin').addEventListener('click', () => {
+            signupForm.classList.remove('active');
+            loginForm.classList.add('active');
+        });
+
+        // Signup
+        signupForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('signupUsername').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirm = document.getElementById('signupConfirm').value;
+            const role = document.getElementById('signupRole').value;
+
+            if (password !== confirm) {
+                alert("Passwords do not match!");
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            if (users.some(u => u.username === username || u.email === email)) {
+                alert("Username or Email already exists!");
+                return;
+            }
+
+            users.push({
+                username,
+                email,
+                password,
+                role
+            });
+            localStorage.setItem('users', JSON.stringify(users));
+            alert("Signup successful! Please login.");
+            signupForm.reset();
+            signupForm.classList.remove('active');
+            loginForm.classList.add('active');
+        });
+
+        // Login
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            const role = document.getElementById('loginRole').value;
+
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.username === username && u.password === password && u.role === role);
+
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify(user)); // Store logged in user
+                if (role === 'student') window.location.href = "student-dashboard.html";
+                else if (role === 'company') window.location.href = "company-dashboard.html";
+                else window.location.href = "admin-dashboard.html";
+            } else {
+                alert("Invalid username, password, or role!");
+            }
+        });
+    </script>
+</body>
+
+</html>
