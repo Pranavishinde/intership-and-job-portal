@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background: #f4f6f9;
+        }
+        
+        .sidebar {
+            height: 100vh;
+            background: #1e2a38;
+            color: white;
+            padding: 20px;
+        }
+        
+        .sidebar a {
+            display: block;
+            color: white;
+            margin: 15px 0;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .sidebar a:hover {
+            color: #17a2b8;
+        }
+        
+        .content {
+            padding: 30px;
+            width: 100%;
+        }
+        
+        .card {
+            margin-bottom: 20px;
+        }
+        
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        #profilePhotoPreview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-top: 10px;
+        }
+        
+        .skill-badge {
+            margin: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="d-flex">
+        Sidebar
+        <div class="sidebar">
+            <h3>My Dashboard</h3>
+            <a onclick="showSection('profileSection')">My Profile</a>
+            <a onclick="showSection('jobSection')">View Jobs</a>
+            <a onclick="showSection('internshipSection')">View Internships</a>
+            <a onclick="showSection('favSection')">Favourites</a>
+            <a onclick="showSection('appliedSection')">Applied</a>
+        </div>
+
+        <!-- Main Content-->
+        <div class="content flex-grow-1">
+            <button class="btn btn-danger logout-btn">Logout</button>
+
+            <!-- Profile Section -->
+            <div id="profileSection">
+                <h2>My Profile</h2>
+                <form id="profileForm">
+                    <!-- Profile Photo -->
+                    <div class="mb-3">
+                        <label class="form-label">Profile Photo</label>
+                        <input type="file" class="form-control" id="studentPhoto" accept="image/*" onchange="previewPhoto(event)">
+                        <img id="profilePhotoPreview" src="https://via.placeholder.com/120" alt="Profile Photo">
+                    </div>
+
+                    <!-- Name -->
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="studentName" value="John Doe">
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" id="studentEmail" value="john@example.com">
+                    </div>
+
+                    <!-- Skills -->
+                    <div class="mb-3">
+                        <label class="form-label">Skills</label>
+                        <div class="d-flex">
+                            <input type="text" class="form-control me-2" id="skillInput" placeholder="Enter a skill">
+                            <button type="button" class="btn btn-secondary" onclick="addSkill()">Add</button>
+                        </div>
+                        <div id="skillList" class="mt-2"></div>
+                    </div>
+
+                    <!-- Resume Upload -->
+                    <div class="mb-3">
+                        <label class="form-label">Upload Resume</label>
+                        <input type="file" class="form-control" id="studentResume" accept=".pdf,.doc,.docx">
+                    </div>
+
+                    <button type="button" class="btn btn-success" onclick="saveProfile()">Save Profile</button>
+                </form>
+            </div>
+
+            <!-- Jobs Section -->
+            <div id="jobSection" class="hidden">
+                <h2>Available Jobs</h2>
+                <input type="text" id="searchBarJobs" class="form-control mb-3" placeholder="Search jobs or companies">
+                <div id="jobList">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Software Engineer</h5>
+                            <p class="card-text">Company: XYZ Pvt Ltd | Location: Mumbai</p>
+                            <p><b>Skills:</b> Java, SQL, Spring</p>
+                            <button class="btn btn-primary">Apply</button>
+                            <button class="btn btn-outline-warning" onclick="addToFav(this)">Add to Favourites</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Internship Section -->
+            <div id="internshipSection" class="hidden">
+                <h2>Available Internships</h2>
+                <input type="text" id="searchBarIntern" class="form-control mb-3" placeholder="Search internships or companies">
+                <div id="internshipList">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Web Developer Intern</h5>
+                            <p class="card-text">Company: ABC Tech | Location: Remote</p>
+                            <p><b>Skills:</b> HTML, CSS, JavaScript</p>
+                            <button class="btn btn-primary">Apply</button>
+                            <button class="btn btn-outline-warning" onclick="addToFav(this)">Add to Favourites</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Favourites Section -->
+            <div id="favSection" class="hidden">
+                <h2>My Favourites</h2>
+                <div id="favList"></div>
+            </div>
+
+            <!-- Applied Section -->
+            <div id="appliedSection" class="hidden">
+                <h2>Applied Jobs/Internships</h2>
+                <p>No applications yet.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Switch between sections
+        function showSection(sectionId) {
+            document.querySelectorAll('.content > div').forEach(div => {
+                div.classList.add('hidden');
+            });
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+
+        // Profile Photo Preview
+        function previewPhoto(event) {
+            let reader = new FileReader();
+            reader.onload = function() {
+                document.getElementById("profilePhotoPreview").src = reader.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        // Add Skills
+        function addSkill() {
+            let skillInput = document.getElementById("skillInput");
+            let skill = skillInput.value.trim();
+            if (skill) {
+                let skillBadge = document.createElement("span");
+                skillBadge.className = "badge bg-info text-dark skill-badge";
+                skillBadge.innerText = skill + " ×";
+                skillBadge.style.cursor = "pointer";
+                skillBadge.onclick = function() {
+                    this.remove();
+                };
+                document.getElementById("skillList").appendChild(skillBadge);
+                skillInput.value = "";
+            }
+        }
+
+        // Save Profile
+        function saveProfile() {
+            alert("Profile saved successfully!");
+        }
+
+        // Add to favourites
+        function addToFav(btn) {
+            let favList = document.getElementById("favList");
+            let card = btn.closest(".card").cloneNode(true);
+            card.querySelector("button").remove(); // remove Apply button
+            btn.remove(); // remove Fav button
+            favList.appendChild(card);
+        }
+    </script>
+</body>
+
+</html>
